@@ -3,9 +3,9 @@ CREATE TABLE Texas_Electricity_Demand2 (
     Demand   Decimal(8,1) )
 
 
-# delate table
+-- delate table
 DROP TABLE [dbo].[tableName]
 
 
-# delate all rows
+-- delate all rows
 TRUNCATE TABLE [dbo].[tableName]
