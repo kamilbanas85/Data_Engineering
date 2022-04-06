@@ -51,3 +51,8 @@ with sql.connect(server_hostname="<server-hostname>",
 ###################################################################################
 #### Write data to local storage
 
+df.write.format("parquet").saveAsTable(TableName)
+
+### read
+
+
