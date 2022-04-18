@@ -38,6 +38,31 @@ with pyodbc.connect('DRIVER='+driver+
                     ';PORT=1433;DATABASE='+database+
                     ';UID='+username+
                     ';PWD='+ password) as conn:
+  
+### AZURE - mfa - interactive - window o login shows:
+### 
+### !!! You need to install adalsql.dll first. Remember to choose ENU\x86\adalsql.msi.
+### !!! https://www.microsoft.com/en-us/download/confirmation.aspx?id=48742
+### 
+
+Authentication='ActiveDirectoryInteractive'
+
+with pyodbc.connect('DRIVER='+driver+
+                    ';SERVER=tcp:'+server+
+                    ';PORT=1433;DATABASE='+database+
+                    ';UID='+username+
+                    ';AUTHENTICATION='+Authentication) as conn:
+  
+### AZURE - mfa - to prevent showing window to login:
+
+Authentication='ActiveDirectoryPassword'
+
+with pyodbc.connect('DRIVER='+driver+
+                    ';SERVER=tcp:'+server+
+                    ';PORT=1433;DATABASE='+database+
+                    ';UID='+username+
+                    ';PWD='+ password+
+                    ';AUTHENTICATION='+Authentication) as conn:
 
     
 ##############################
