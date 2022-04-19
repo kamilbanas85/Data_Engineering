@@ -88,6 +88,7 @@ with pyodbc.connect('DRIVER='+driver+
         cursor.execute( Sql_query )
         cursor.commit()
         
+        
 ######################################################
 ######################################################
 ######################################################
@@ -119,8 +120,64 @@ engine = sa.create_engine("mssql+pyodbc:///?odbc_connect={}".format(params),
 with engine.connect() as con:
     con.execute( sql_query )
 
-###########################
+###############################################################################################################################
+###############################################################################################################################
 ### write dataframe to sql table
+###############################################################################################################################
+###############################################################################################################################
+
+### with pyodbc
+
+import pyodbc
+
+server = 'serverName'
+database = 'dbName'
+driver= '{ODBC Driver 17 for SQL Server}'
+
+
+# replace np.nan with None - ro prevent error from sql
+df = df.astype(object).where(df.notnull(), None)
+
+
+# form SQL statement
+SQL_table_name = '[LNG].[LNGliquefactionCapacity_Reuters] '
+ColumnsNameList = ['['+ name + ']' for name in df.columns]
+values = '('+', '.join(['?']*len(ColumnsNameList))+')'    
+sqlQuery = f"INSERT INTO {SQL_table_name} ({', '.join(ColumnsNameList)}) VALUES {values}"
+
+# extract values from DataFrame into list of tuples
+DFasListOfTuple = [tuple(x) for x in df.values]
+
+with pyodbc.connect('Driver='+driver +
+                    ';Server='+server + 
+                    ";PORT=1443;Database="+ database +
+                    ";Trusted_Connection=yes") as conn:
+
+    with conn.cursor() as cursor:
+        cursor.fast_executemany = True
+        cursor.executemany(sqlQuery, DFasListOfTuple)
+
+###########################################################
+### second method - with pyodbc
+
+ColumnsNameList = ['['+ name + ']' for name in LNG_production_capacity_AfterReplacement.columns]
+ColumnsNameListWithRow =  ['row["'+ name + '"]' for name in LNG_production_capacity_AfterReplacement.columns]
+
+sqlQuery =  f"""INSERT INTO [LNG].[LNGliquefactionCapacity_Reuters] 
+                           ({', '.join(ColumnsNameList)}) values({', '.join(['?' for x in ColumnsNameList]) })"""
+
+with pyodbc.connect('Driver='+driver +
+                    ';Server='+server + 
+                    ";PORT=1443;Database="+ database +
+                    ";Trusted_Connection=yes") as conn:
+
+    with conn.cursor() as cursor:
+        for index, row in df.iterrows():
+            cursor.execute( sqlQuery, row['col_1'], row['col_2'], ..., row['col_n'] )
+            cursor.commit()        
+
+###########################################################  
+### with SQLAlchemy
 # .to_sql only work with sqlAlchemy connection
 
 
@@ -132,6 +189,8 @@ df.reset_index()\
             chunksize=1000)
         
 # append - pevent to delate datatypes, so to load all data frame it requires delate all rows:
+
+
         
 ################################################################
 ###############################################################   
