@@ -46,7 +46,41 @@ with sql.connect(server_hostname="<server-hostname>",
 ###################################################################################
 #### Mount Storage -> DataLakeStoregeFile (DFSF)
 
+# For key-valute
+adls_name = dbutils.secrets.get(scope = "scope_in_kv", key="adls-name_in_kv") 
+adls_key = dbutils.secrets.get(scope = "scope_in_kv", key="key_name_in_kv")
+# or from key generated inside storage recource (in Azure)
+adls_key ='xxx=='
+adls_name = 'Name_of_Storage'
 
+
+#Mount adls file system
+container_name = 'Container_Name'
+
+if all(mount.mountPoint != "/mnt/"+container_name for mount in dbutils.fs.mounts()):
+  dbutils.fs.mount(
+    source = "wasbs://"+container_name+"@"+adls_name+".blob.core.windows.net",
+    mount_point = "/mnt/"+container_name,
+    extra_configs = {"fs.azure.account.key."+adls_name+".blob.core.windows.net":adls_key} )
+
+
+  
+# define path to raport folders
+PathToFolder = f'/dbfs/mnt/{container_name}/FolderName/'  
+ 
+
+#Unmount adls file system
+mount_point = "/mnt/" + container_name
+
+if any(mount.mountPoint == mount_point for mount in dbutils.fs.mounts()):
+  dbutils.fs.unmount(mount_point)
+
+
+###################################################################################          
+###################################################################################
+#### Read Parameter 
+  
+  
 ###################################################################################          
 ###################################################################################
 #### Write data to local storage
