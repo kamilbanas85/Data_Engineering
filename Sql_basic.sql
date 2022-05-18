@@ -1,3 +1,8 @@
+-- Create schema
+CREATE SCHEMA schema_name
+
+
+--
 CREATE TABLE Texas_Electricity_Demand2 (
     [Date]     VARCHAR(30)  NOT NULL PRIMARY KEY,
     Demand   Decimal(8,1) )
