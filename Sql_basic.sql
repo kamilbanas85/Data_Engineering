@@ -18,7 +18,7 @@ TRUNCATE TABLE [dbo].[tableName]
 
 -- insert into Table1 from Table2:
 INSERT INTO [schemaName].[Table1] (
-	   [col1]
+       [col1]
       ,[col2] )
 SELECT [col1]
       ,[col2] 
@@ -29,3 +29,5 @@ FROM [schemaName].[Table2]
 DELETE t1 
 FROM [schemaName].[Table1] as t1
 INNER JOIN [schemaName].[Table2] as t2 ON t1.ColNameInTable1 = t2.ColNameInTable2;
+
+
