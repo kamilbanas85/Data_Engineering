@@ -13,31 +13,34 @@ import urllib
 ##############################
 ### connect to DB
 
-server = 'dashboard-dbserver01.database.windows.net'
-database = 'baza01'
-username = 'kamilbanas85'
-password = 'pasword'
-driver= '{ODBC Driver 17 for SQL Server}'
+ServerName = 'ServerName.database.windows.net'
+DBname = 'DBname'
+Driver= '{ODBC Driver 17 for SQL Server}'
+UserName = 'UserName'
+Password = 'XXX'
 
 
 ### 'trusted-azure' - inisde web-app with identiy:
-with pyodbc.connect('Driver='+driver +
-                     ';Server='+server + 
-                     ";PORT=1443;Database="+ database +
-                     ";Authentication=ActiveDirectoryMsi") as conn:
+with pyodbc.connect('Driver=' + Driver +
+                    ';Server=' + ServerName + 
+                    ';PORT=1443' +
+                    ';Database=' + DBname +
+                    ';Authentication=ActiveDirectoryMsi') as conn:
 
 ### 'trusted':
-with pyodbc.connect('Driver='+driver +
-                    ';Server='+server + 
-                    ";PORT=1443;Database="+ database +
-                    ";Trusted_Connection=yes") as conn:
+with pyodbc.connect('Driver=' + Driver +
+                    ';Server=' + ServerName + 
+                    ';PORT=1443' +
+                    ';Database=' + DBname +
+                    ';Trusted_Connection=yes') as conn:
                 
 ### 'password'
-with pyodbc.connect('DRIVER='+driver+
-                    ';SERVER=tcp:'+server+
-                    ';PORT=1433;DATABASE='+database+
-                    ';UID='+username+
-                    ';PWD='+ password) as conn:
+with pyodbc.connect('DRIVER=' + Driver +
+                    ';SERVER=' + ServerName +
+                    ';PORT=1433'+
+                    ';DATABASE=' + DBname +
+                    ';UID=' + UserName +
+                    ';PWD=' + Password) as conn:
  
 ### AZURE - mfa - interactive - window o login shows:
 ### 
@@ -47,42 +50,44 @@ with pyodbc.connect('DRIVER='+driver+
 
 Authentication='ActiveDirectoryInteractive'
 
-with pyodbc.connect('DRIVER='+driver+
-                    ';SERVER=tcp:'+server+
-                    ';PORT=1433;DATABASE='+database+
-                    ';UID='+username+
-                    ';AUTHENTICATION='+Authentication) as conn:
+with pyodbc.connect('DRIVER='+ Driver +
+                    ';SERVER='+ ServerName +
+                    ';PORT=1433'+
+                    ';DATABASE=' + DBname +
+                    ';UID=' + username +
+                    ';AUTHENTICATION='+ Authentication) as conn:
   
 ### AZURE - mfa - to prevent showing window to login:
 
 Authentication='ActiveDirectoryPassword'
 
-with pyodbc.connect('DRIVER='+driver+
-                    ';SERVER=tcp:'+server+
-                    ';PORT=1433;DATABASE='+database+
-                    ';UID='+username+
-                    ';PWD='+ password+
+with pyodbc.connect('DRIVER='+ Driver +
+                    ';SERVER='+ ServerName +
+                    ';PORT=1433'+
+                    ';DATABASE=' + DBname +
+                    ';UID='+UserName +
+                    ';PWD='+ Password +
                     ';AUTHENTICATION='+Authentication) as conn:
 
     
 ##############################
 ####### then inside connection  read data to pandas  DataFrame  
-with pyodbc.connect('DRIVER='+driver+
-                    ';SERVER=tcp:'+server+
-                    ';PORT=1433;DATABASE='+database+
-                    ';UID='+username+
-                    ';PWD='+ password) as conn:
+with pyodbc.connect('Driver=' + Driver +
+                    ';Server=' + ServerName + 
+                    ';PORT=1433'+
+                    ';DATABASE=' + DBname +
+                    ';Trusted_Connection=yes') as conn:
     
     data = pd.read_sql_query( Sql_query,  conn)
 
 
 ##############################
 ####### or inside connection make query  
-with pyodbc.connect('DRIVER='+driver+
-                    ';SERVER=tcp:'+server+
-                    ';PORT=1433;DATABASE='+database+
-                    ';UID='+username+
-                    ';PWD='+ password) as conn:
+with pyodbc.connect('Driver=' + Driver +
+                    ';Server=' + ServerName + 
+                    ';PORT=1433'+
+                    ';DATABASE=' + DBname +
+                    ';Trusted_Connection=yes') as conn:
 
     with conn.cursor() as cursor:
         cursor.execute( Sql_query )
