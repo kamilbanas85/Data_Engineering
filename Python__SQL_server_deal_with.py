@@ -20,13 +20,13 @@ password = 'pasword'
 driver= '{ODBC Driver 17 for SQL Server}'
 
 
-#'trusted-azure' - inisde web-app with identiy:
+### 'trusted-azure' - inisde web-app with identiy:
 with pyodbc.connect('Driver='+driver +
                      ';Server='+server + 
                      ";PORT=1443;Database="+ database +
                      ";Authentication=ActiveDirectoryMsi") as conn:
 
-###'trusted':
+### 'trusted':
 with pyodbc.connect('Driver='+driver +
                     ';Server='+server + 
                     ";PORT=1443;Database="+ database +
@@ -38,7 +38,7 @@ with pyodbc.connect('DRIVER='+driver+
                     ';PORT=1433;DATABASE='+database+
                     ';UID='+username+
                     ';PWD='+ password) as conn:
-  
+ 
 ### AZURE - mfa - interactive - window o login shows:
 ### 
 ### !!! You need to install adalsql.dll first. Remember to choose ENU\x86\adalsql.msi.
@@ -66,7 +66,7 @@ with pyodbc.connect('DRIVER='+driver+
 
     
 ##############################
-####### inside connection  read data to pandas  DataFrame  
+####### then inside connection  read data to pandas  DataFrame  
 with pyodbc.connect('DRIVER='+driver+
                     ';SERVER=tcp:'+server+
                     ';PORT=1433;DATABASE='+database+
@@ -77,7 +77,7 @@ with pyodbc.connect('DRIVER='+driver+
 
 
 ##############################
-####### inside connection make query  
+####### or inside connection make query  
 with pyodbc.connect('DRIVER='+driver+
                     ';SERVER=tcp:'+server+
                     ';PORT=1433;DATABASE='+database+
@@ -87,11 +87,61 @@ with pyodbc.connect('DRIVER='+driver+
     with conn.cursor() as cursor:
         cursor.execute( Sql_query )
         cursor.commit()
+
+
+############################################################################################################
+### With function
+
+import numpy as np
+import pandas as pd
+import pyodbc
+
+def get_connection(ServerName: str, DBname: str, Driver: str,\
+                   Authenication: str = 'trusted',\
+                   UserName: str = 'UserName', Password: str= 'Password') -> str:
+    
+    # Authenication =  'trusted'  or  'password'  or  'trusted-azure'
+    
+    BaiscConnStr = 'Driver=' + Driver +\
+                   ';Server=' + ServerName +\
+                   ';PORT=1443' +\
+                   ';Database=' + DBname                
+          
+    if Authenication =='trusted':
+          ConnStr = BaiscConnStr +\
+                     ";Trusted_Connection=yes"
+
+    elif  Authenication == 'trusted-azure':
+          ConnStr = BaiscConnStr +\
+                     ";Authentication=ActiveDirectoryMsi"
+
+    elif  Authenication == 'password':
+          ConnStr = BaiscConnStr +\
+                     ";UID=" + UserName +\
+                     ";PWD=" + Password
+
+    
+    conn = pyodbc.connect( ConnStr )
+
+    return conn
+  
+### then
+
+ServerName = 'ServerName.database.windows.net'
+DBname = 'DBname'
+Driver= '{ODBC Driver 17 for SQL Server}'
+UserName = 'UserName'
+Password = 'XXX'
+    
+# Authenication =  'trusted'  or  'password'  or  'trusted-azure'
+conn = get_connection( ServerName, DBname, Driver, Authenication, UserName, Password)
+    
+with conn:
+  data = pd.read_sql_query( querySQL,  conn)   
         
-        
-######################################################
-######################################################
-######################################################
+############################################################################################################
+############################################################################################################
+############################################################################################################
 ### Sql alchemy
 
 ### password
