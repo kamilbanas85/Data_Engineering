@@ -195,7 +195,7 @@ df = df.astype(object).where(df.notnull(), None)
 
 
 # form SQL statement
-SQL_table_name = '[LNG].[LNGliquefactionCapacity_Reuters] '
+SQL_table_name = '[SchemaName].[TableName]'
 ColumnsNameList = ['['+ name + ']' for name in df.columns]
 values = '('+', '.join(['?']*len(ColumnsNameList))+')'    
 sqlQuery = f"INSERT INTO {SQL_table_name} ({', '.join(ColumnsNameList)}) VALUES {values}"
@@ -215,10 +215,10 @@ with pyodbc.connect('Driver='+driver +
 ###########################################################
 ### second method - with pyodbc
 
-ColumnsNameList = ['['+ name + ']' for name in LNG_production_capacity_AfterReplacement.columns]
-ColumnsNameListWithRow =  ['row["'+ name + '"]' for name in LNG_production_capacity_AfterReplacement.columns]
+ColumnsNameList = ['['+ name + ']' for name in DF.columns]
+ColumnsNameListWithRow =  ['row["'+ name + '"]' for name in DF.columns]
 
-sqlQuery =  f"""INSERT INTO [LNG].[LNGliquefactionCapacity_Reuters] 
+sqlQuery =  f"""INSERT INTO [SchemaName].[TableName] 
                            ({', '.join(ColumnsNameList)}) values({', '.join(['?' for x in ColumnsNameList]) })"""
 
 with pyodbc.connect('Driver='+driver +
