@@ -101,9 +101,9 @@ import numpy as np
 import pandas as pd
 import pyodbc
 
-def get_connection(ServerName: str, DBname: str, Driver: str,\
-                   Authenication: str = 'trusted',\
-                   UserName: str = 'UserName', Password: str= 'Password') -> str:
+def GetConnStr(ServerName: str, DBname: str, Driver: str,\
+               Authenication: str = 'trusted',\
+               UserName: str = 'UserName', Password: str= 'Password') -> str:
     
     # Authenication =  'trusted'  or  'password'  or  'trusted-azure'
     
@@ -125,10 +125,7 @@ def get_connection(ServerName: str, DBname: str, Driver: str,\
                      ";UID=" + UserName +\
                      ";PWD=" + Password
 
-    
-    conn = pyodbc.connect( ConnStr )
-
-    return conn
+    return ConnStr
   
 ### then
 
@@ -139,8 +136,9 @@ UserName = 'UserName'
 Password = 'XXX'
     
 # Authenication =  'trusted'  or  'password'  or  'trusted-azure'
-conn = get_connection( ServerName, DBname, Driver, Authenication, UserName, Password)
-    
+connStr = GetConnStr( ServerName, DBname, Driver, Authenication, UserName, Password)
+conn = pyodbc.connect( connStr )
+
 with conn:
   data = pd.read_sql_query( querySQL,  conn)   
         
