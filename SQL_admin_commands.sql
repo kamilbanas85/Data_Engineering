@@ -1,8 +1,12 @@
 --------------------------------------------------------
--- add user to azure DB 
+-- add user to azure DB
+--
+-- You should be loged as 'Azure Active Directory admin' to give access to user from AD
+-- The best create group in AD and give access to group
+--
 
-CREATE USER [DashboardProba003] FROM EXTERNAL PROVIDER;
-ALTER ROLE db_datareader ADD MEMBER [DashboardProba003];
+CREATE USER [GroupNameInAD] FROM EXTERNAL PROVIDER;
+ALTER ROLE db_datareader ADD MEMBER [GroupNameInAD];
 GO
 
 
