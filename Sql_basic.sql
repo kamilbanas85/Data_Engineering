@@ -1,16 +1,28 @@
 -- Create schema
 CREATE SCHEMA schema_name
 
+-- to deltae shama it must by empty - without tables
+DROP SCHEMA schema_name
+
 
 --
 CREATE TABLE Texas_Electricity_Demand2 (
     [Date]     VARCHAR(30)  NOT NULL PRIMARY KEY,
-    Demand   Decimal(8,1) 
+    [Demand]   Decimal(8,1),
+    [Date2] DATETIME,
     )
 
 
 -- delate table
 DROP TABLE [dbo].[tableName]
+
+
+-- copy tables columns and stracture into other table
+SELECT  *
+    INTO [SchmaName].[TableName1]
+FROM [SchmaName1].[TableName2]
+    WHERE 1=2
+go
 
 
 -- delate all rows
