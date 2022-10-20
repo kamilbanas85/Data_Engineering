@@ -25,8 +25,19 @@ df=spark.createDataFrame([(1, "test1"),(2,"test2")],["id", "name"])
 df.write.jdbc(url=jdbcUrl,table="users",mode="overwrite",properties=connectionProperties)
 
 
+########################################################################
+## save data to local Disc
+
+spark.createDataFrame( PandasDF.reset_index() ).write.mode("overwrite").saveAsTable("TableName")
 
 ########################################################################
+## read data from local Disc
+
+spark.sql("select * from TableName").toPandas() 
+
+  
+
+####################################################################
 #### https://docs.databricks.com/dev-tools/python-sql-connector.html
 
 from databricks import sql
@@ -76,17 +87,5 @@ if any(mount.mountPoint == mount_point for mount in dbutils.fs.mounts()):
   dbutils.fs.unmount(mount_point)
 
 
-###################################################################################          
-###################################################################################
-#### Read Parameter 
-  
-  
-###################################################################################          
-###################################################################################
-#### Write data to local storage
-
-df.write.format("parquet").saveAsTable(TableName)
-
-### read
 
 
