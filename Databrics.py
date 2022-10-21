@@ -33,9 +33,9 @@ spark.createDataFrame( PandasDF.reset_index() ).write.mode("overwrite").saveAsTa
 ########################################################################
 ## read data from local Disc
 
-spark.sql("select * from TableName").toPandas() 
+df_spark = spark.sql("select * from TableName")
 
-  
+df_pd = df_spark.toPandas() # or in one line
 
 ####################################################################
 #### https://docs.databricks.com/dev-tools/python-sql-connector.html
