@@ -86,6 +86,43 @@ mount_point = "/mnt/" + container_name
 if any(mount.mountPoint == mount_point for mount in dbutils.fs.mounts()):
   dbutils.fs.unmount(mount_point)
 
+  
+###################################################################################          
+###################################################################################
+#### write data into FileStore
+
+FileName.to_csv( "/dbfs/FileStore/MyFolderName/MyFileName.csv" )
+
+### read data
+
+df = pd.read_csv( '/dbfs/FileStore/MyFolderName/MyFileName.csv' )
 
 
+###################################################################################          
+###################################################################################
+#### Clear memory besides some variables
 
+def ClearMemory( BaseVariableList ):
+
+	DataListCurrent = [k for (k,v) in globals().items() ]
+	diffVar = list( set(DataListCurrent)-set(BaseVariableList ) )
+
+
+	for Var in diffVar:
+	   try:
+		del globals()[Var]
+		import gc
+		gc.collect()
+	   except KeyError:
+		next
+    
+###################################################################################          
+###################################################################################
+#### Inside DataBrics Script Define Basic Variable List which shoudn't be delated (return all variables in cuurrent moment)
+
+DataList = []
+DataList = [k for (k,v) in globals().items() ]
+
+### After the statment below all variables despie of defined in'DataList' will be delated
+
+ClearMemory(DataList)
