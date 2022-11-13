@@ -53,3 +53,9 @@ INNER JOIN [schemaName].[Table2] as t2 ON t1.ColNameInTable1 = t2.ColNameInTable
 UPDATE [scheaName].[TableName]
 SET column1 = value1, column2 = value2, ...
 WHERE condition; 
+
+
+-- Select data between some date and current time
+SELECT CAST(DateCol AS DATE), Col1, col2
+FROM table
+WHERE DateCol between '2005-01-01' and CAST( GETDATE() AS DATE)
