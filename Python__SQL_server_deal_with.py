@@ -147,6 +147,17 @@ with conn:
 ############################################################################################################
 ### Sql alchemy
 
+conn_str = GetConnStr(server_name, database_name, driver )
+
+engine = sa.create_engine("mssql+pyodbc:///?odbc_connect={}".format(conn_str),
+                          fast_executemany=True,\
+                          connect_args={'connect_timeout': 10},\
+                          echo=False)
+
+
+###########################
+### or 
+
 ### password
 params = urllib.parse.quote_plus('DRIVER='+driver+
                                  ';SERVER=tcp:'+server+
