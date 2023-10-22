@@ -126,3 +126,9 @@ DataList = [k for (k,v) in globals().items() ]
 ### After the statment below all variables despie of defined in'DataList' will be delated
 
 ClearMemory(DataList)
+
+###################################################################################          
+###################################################################################
+#### scope list using pyspark
+
+dbutils.secrets.listScopes()
