@@ -48,27 +48,49 @@ Fill:
 # add 'Service Principal ID' to ADD group with proper permitions (or add add ADD user to SQL)
 # save 'Service Principal ID' and 'Service Principal Secret' to key-valut
 
-@retry(tries=5, delay=60)
-def read_data_from_AZURE_SQL_db_based_on_sp(SQLquery):
+
+
+########################################################################
+### get data from SQL based on sevie principale
+
+
+     @retry(tries=5, delay=60)
+     def read_data_from_AZURE_SQL_db_based_on_sp(SQLquery):
+       
+       jdbcHostname = "dbURL"
+       jdbcDatabase = "baName"
+       jdbcPort = 1433
+       jdbcPrincipalId = dbutils.secrets.get(scope = "scope_name", key="Service Principal ID")
+       jdbcPrincipalSecret = dbutils.secrets.get(scope = "scope_name", key="Service Principal Secret")
+       
+       jdbcUrl = f"jdbc:sqlserver://{jdbcHostname}:{jdbcPort};database={jdbcDatabase}"
+       connectionProperties = {
+             "driver":"com.microsoft.sqlserver.jdbc.SQLServerDriver",
+             "authentication" : "ActiveDirectoryServicePrincipal",
+             "user" : jdbcPrincipalId ,
+             "password" : jdbcPrincipalSecret
+       }
+       
+       # Conver SQL query to AZURE SQL query
+       sqlQueryForAZURE =  f"({SQLquery})  pushdown_query_alias" 
+       
+       # Read data from DataBase
+       DataFromDataBase = spark.read.jdbc(url = jdbcUrl, table =  sqlQueryForAZURE, properties = connectionProperties)
+       
+       return DataFromDataBase
+
+### oryginal was:
+
+'''
+     connectionProperties = {
+         "driver":"com.microsoft.sqlserver.jdbc.SQLServerDriver",
+         "authentication" : "ActiveDirectoryServicePrincipal",
+         "addSecurePrincipalId" : dbr_PrincipalId ,
+         "addSecurePrincipalSecret" : dbr_PrincipalSecret
+     }
+'''
+
+
   
-  jdbcHostname = "dbURL"
-  jdbcDatabase = "baName"
-  jdbcPort = 1433
-  jdbcPrincipalId = dbutils.secrets.get(scope = "scope_name", key="Service Principal ID")
-  jdbcPrincipalSecret = dbutils.secrets.get(scope = "scope_name", key="Service Principal Secret")
+
   
-  jdbcUrl = f"jdbc:sqlserver://{jdbcHostname}:{jdbcPort};database={jdbcDatabase}"
-  connectionProperties = {
-        "driver":"com.microsoft.sqlserver.jdbc.SQLServerDriver",
-        "authentication" : "ActiveDirectoryServicePrincipal",
-        "user" : jdbcPrincipalId ,
-        "password" : jdbcPrincipalSecret
-  }
-  
-  # Conver SQL query to AZURE SQL query
-  sqlQueryForAZURE =  f"({SQLquery})  pushdown_query_alias" 
-  
-  # Read data from DataBase
-  DataFromDataBase = spark.read.jdbc(url = jdbcUrl, table =  sqlQueryForAZURE, properties = connectionProperties)
-  
-  return DataFromDataBase
