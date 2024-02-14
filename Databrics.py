@@ -162,13 +162,13 @@
 
         ### define funtion to evaulate data types string
 	def evalute_columns_type_string(df, object_type = 'VARCHAR(20)', numeric_type = 'DECIMAL(10, 2)', date_type = 'date'):
-	
+
 	  cols_type_object = ", ".join([f"`{column}` {object_type}"  for column in df.select_dtypes(include=['object'] ).columns ])
 	  cols_type_numeric = ", ".join([f"`{column}` {numeric_type}"  for column in df.select_dtypes(include= ['number'] ).columns ])
 	  cols_type_date = ", ".join([f"`{column}` {date_type}"  for column in df.select_dtypes(include= ['datetime64', 'datetime64[ns]'] ).columns ])
-	  
-	  cols_type = cols_type_object + ', ' + cols_type_numeric + ', ' + cols_type_date
 	
+	  cols_type = ', '.join([col_type for col_type in [cols_type_object, cols_type_numeric, cols_type_date] if col_type])
+	  
 	  return cols_type
 
 	### 
