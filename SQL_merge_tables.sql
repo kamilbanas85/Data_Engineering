@@ -101,3 +101,39 @@
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 ---- Join tables dirrfernt method
+
+
+  SELECT *
+  FROM 
+  (
+    	SELECT  [date]
+  	       ,[col1] as [value]
+  		   ,'desc_1' as [descriprion]
+    	FROM [schama_01].[table_01]
+  
+  	UNION ALL
+  
+    	SELECT  [date]
+  	       ,[col5] as [value]
+  		   ,'desc_2' as [descriprion]
+    	FROM [schama_02].[table_02]
+  
+  	UNION ALL
+  
+    	SELECT  [date]
+  	       ,[col111] as [value]
+  		   ,'desc_3' as [descriprion]
+    	FROM [schama_03].[table_03]
+  
+  
+  ) src
+  pivot
+  (
+  	SUM([value])
+    for [descriprion] in (
+  			,[desc_1]
+  			,[desc_2]
+  			,[desc_3]) 
+    ) piv
+  order by dateCET
+  GO
