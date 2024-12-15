@@ -7,9 +7,8 @@ Aby plik YMAL mógł wykonać 'commit' zmian do danego środowiska, należy nada
 (Project Setting -> Repositories -> Nazwa Repo -> Security)
 
 
-https://github.com/kamilbanas85/Data_Engineering/blob/main/schemat.jpg
 
-<img src="./schemat.jpg" alt="Alt text" title="Optional title" width="300">
+<img src="./schemat.jpg" width="600">
 
 
 Przykład pliku YMAL:
