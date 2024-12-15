@@ -9,6 +9,8 @@ Aby plik YMAL mógł wykonać 'commit' zmian do danego środowiska, należy nada
 
 https://github.com/kamilbanas85/Data_Engineering/blob/main/schemat.jpg
 
+<img src="./schemat.jpg" alt="Alt text" title="Optional title" width="300">
+
 
 Przykład pliku YMAL:
 
